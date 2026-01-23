@@ -15,16 +15,27 @@ A Tinder-like backend API for developers to match based on skills, programming l
 - **Preferences Management**: Customizable matching preferences (skills, languages, age, distance).
 - **Reporting System**: User reports for moderation.
 - **Performance Caching**: Redis-powered caching for geocoding, potential matches, and compatibility scores.
+- **Type Safety**: Full TypeScript implementation with compile-time type checking.
 - **API Documentation**: Full Swagger/OpenAPI documentation.
 - **Seed Data**: Script to populate database with sample users and data.
 - **Containerization**: Docker support for easy development and deployment.
 
+## TypeScript Benefits
+
+This project is fully implemented in TypeScript, providing:
+
+- **Type Safety**: Compile-time error catching prevents runtime issues
+- **Better Developer Experience**: IntelliSense, auto-completion, and refactoring support
+- **Self-Documenting Code**: Type annotations serve as inline documentation
+- **Maintainability**: Easier to scale and add new features with type contracts
+- **API Reliability**: Typed request/response interfaces ensure consistency
+
 ## Tech Stack
 
-- **Backend**: Node.js, Express.js
+- **Backend**: Node.js, Express.js, **TypeScript** (fully typed for type safety)
 - **Database**: MongoDB with Mongoose ODM
 - **Cache**: Redis for performance optimization
-- **Real-Time**: Socket.io
+- **Real-Time**: Socket.io with TypeScript events
 - **Authentication**: JWT (jsonwebtoken)
 - **Validation**: Express-validator
 - **File Upload**: Multer
@@ -32,56 +43,61 @@ A Tinder-like backend API for developers to match based on skills, programming l
 - **Security**: Helmet, CORS, bcrypt
 - **Documentation**: Swagger UI
 - **Containerization**: Docker & Docker Compose
+- **Development**: ts-node for hot reloading
 
 ## Project Structure
 
 ```
 devs-tinder/
-├── index.js                 # Main entry point: Express app, Socket.io, routes
-├── seed.js                  # Database seeding script
+├── index.ts                 # Main entry point: Express app, Socket.io, routes (TypeScript)
+├── seed.ts                  # Database seeding script (TypeScript)
 ├── package.json             # Dependencies and scripts
+├── tsconfig.json            # TypeScript configuration
 ├── .env                     # Environment variables
 ├── .gitignore               # Git ignore rules
 ├── README.md                # Project documentation
 ├── uploads/                 # Uploaded profile images
+├── dist/                    # Compiled JavaScript output
 ├── config/
-│   └── database.js          # MongoDB connection setup
+│   └── database.ts          # MongoDB connection setup
 ├── models/
-│   ├── User.js              # User authentication model
-│   ├── UserProfile.js       # Developer profile details
-│   ├── UserPreferences.js   # Matching preferences
-│   ├── Swipe.js             # Swipe actions
-│   ├── Match.js             # Mutual matches
-│   ├── Message.js           # Chat messages
-│   └── Report.js            # User reports
+│   ├── User.ts              # User authentication model (typed)
+│   ├── UserProfile.ts       # Developer profile details (typed)
+│   ├── UserPreferences.ts   # Matching preferences (typed)
+│   ├── Swipe.ts             # Swipe actions (typed)
+│   ├── Match.ts             # Mutual matches (typed)
+│   ├── Message.ts           # Chat messages (typed)
+│   └── Report.ts            # User reports (typed)
 ├── routes/
-│   ├── auth.js              # Authentication routes
-│   ├── users.js             # User management routes
-│   ├── profiles.js          # Profile CRUD routes
-│   ├── preferences.js       # Preferences CRUD routes
-│   ├── swipes.js            # Swiping routes
-│   ├── matches.js           # Match retrieval routes
-│   ├── messages.js          # Messaging routes
-│   └── reports.js           # Reporting routes
+│   ├── auth.ts              # Authentication routes
+│   ├── users.ts             # User management routes
+│   ├── profiles.ts          # Profile CRUD routes
+│   ├── preferences.ts       # Preferences CRUD routes
+│   ├── swipes.ts            # Swiping routes
+│   ├── matches.ts           # Match retrieval routes
+│   ├── messages.ts          # Messaging routes
+│   └── reports.ts           # Reporting routes
 ├── controllers/
-│   ├── authController.js    # Auth logic
-│   ├── userController.js    # User operations
-│   ├── profileController.js # Profile management
-│   ├── preferenceController.js # Preferences management
-│   ├── swipeController.js   # Swiping logic
-│   ├── matchController.js   # Match handling
-│   ├── messageController.js # Messaging logic
-│   └── reportController.js  # Reporting logic
+│   ├── authController.ts    # Auth logic (typed)
+│   ├── userController.ts    # User operations (typed)
+│   ├── profileController.ts # Profile management (typed)
+│   ├── preferenceController.ts # Preferences management (typed)
+│   ├── swipeController.ts   # Swiping logic (typed)
+│   ├── matchController.ts   # Match handling (typed)
+│   ├── messageController.ts # Messaging logic (typed)
+│   └── reportController.ts  # Reporting logic (typed)
 ├── middleware/
-│   ├── auth.js              # JWT authentication
-│   └── validation.js        # Input validation
+│   ├── auth.ts              # JWT authentication (typed)
+│   └── validation.ts        # Input validation (typed)
 ├── utils/
-│   ├── cache.js             # Redis caching utilities
-│   ├── errorHandler.js      # Error handling
-│   ├── geocode.js           # Geolocation utilities
-│   └── matching.js          # Matching algorithms
+│   ├── cache.ts             # Redis caching utilities (typed)
+│   ├── errorHandler.ts      # Error handling (typed)
+│   ├── geocode.ts           # Geolocation utilities (typed)
+│   └── matching.ts          # Matching algorithms (typed)
+├── types/
+│   └── index.ts             # TypeScript type definitions
 └── tests/
-    └── auth.test.js         # Auth tests
+    └── auth.test.ts         # Auth tests (TypeScript)
 ```
 
 ## Dependencies
@@ -110,11 +126,19 @@ All dependencies are listed in `package.json`. Key packages:
 
 ```json
 {
-  "start": "node index.js",
-  "dev": "nodemon index.js",
-  "seed": "node seed.js"
+  "build": "tsc",
+  "start": "node dist/index.js",
+  "dev": "nodemon --exec ts-node index.ts",
+  "seed": "ts-node seed.ts",
+  "clean": "rm -rf dist"
 }
 ```
+
+- `npm run build` - Compile TypeScript to JavaScript
+- `npm run dev` - Run development server with hot reloading
+- `npm run start` - Run production server from compiled code
+- `npm run seed` - Seed database with sample data
+- `npm run clean` - Remove compiled JavaScript
 
 ## Quick Start
 
@@ -131,26 +155,33 @@ All dependencies are listed in `package.json`. Key packages:
    npm install
    ```
 
-3. **Set up environment variables:**
+3. **Build TypeScript:**
+   ```bash
+   npm run build
+   ```
+
+4. **Set up environment variables:**
    Create a `.env` file in the root directory:
    ```env
    JWT_SECRET=your_super_secret_jwt_key_here
    MONGO_URI=mongodb://localhost:27017/devstinder
+   REDIS_URL=redis://localhost:6379
    PORT=4000
    ```
 
-4. **Start MongoDB:**
-   Ensure MongoDB is running locally:
+5. **Start MongoDB and Redis:**
+   Ensure MongoDB and Redis are running locally:
    ```bash
    mongod
+   redis-server
    ```
 
-5. **Seed the database:**
+6. **Seed the database:**
    ```bash
    npm run seed
    ```
 
-6. **Start the server:**
+7. **Start the server:**
    ```bash
    npm run dev
    ```
@@ -172,9 +203,14 @@ All dependencies are listed in `package.json`. Key packages:
    PORT=4000
    ```
 
-3. **Start with Docker Compose:**
+4. **Start with Docker Compose:**
    ```bash
    docker-compose up --build
+   ```
+
+5. **Seed the database (in another terminal):**
+   ```bash
+   docker-compose exec app npm run seed
    ```
    This starts the app, MongoDB, and Redis containers.
 
@@ -195,6 +231,17 @@ All dependencies are listed in `package.json`. Key packages:
 - `MONGO_URI`: MongoDB connection string (default: `mongodb://localhost:27017/devstinder`)
 - `REDIS_URL`: Redis connection string (default: `redis://localhost:6379`)
 - `PORT`: Server port (default: 4000)
+
+## Development
+
+This project uses TypeScript for development with the following workflow:
+
+1. Write code in `.ts` files
+2. Use `npm run dev` for development with hot reloading
+3. Run `npm run build` to compile to JavaScript in `dist/`
+4. Use `npm start` to run the compiled production code
+
+All code follows strict TypeScript guidelines with comprehensive type definitions in `types/index.ts`.
 
 ## Caching Strategy
 
