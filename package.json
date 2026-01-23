@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mibienpanjoe/devs-tinder.git"
+    "url": "git+https://github.com/mibienpanjoe/devs-tinder-API.git"
   },
   "author": "mibienpanjoe",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mibienpanjoe/devs-tinder/issues"
+    "url": "https://github.com/mibienpanjoe/devs-tinder-API/issues"
   },
-  "homepage": "https://github.com/mibienpanjoe/devs-tinder#readme",
+  "homepage": "https://github.com/mibienpanjoe/devs-tinder-API#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",

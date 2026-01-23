@@ -122,8 +122,8 @@ All dependencies are listed in `package.json`. Key packages:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/mibienpanjoe/devs-dating_app.git
-   cd devs-dating_app
+   git clone https://github.com/mibienpanjoe/devs-tinder-API.git
+   cd devs-tinder-API
    ```
 
 2. **Install dependencies:**
@@ -159,8 +159,8 @@ All dependencies are listed in `package.json`. Key packages:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/mibienpanjoe/devs-dating_app.git
-   cd devs-dating_app
+   git clone https://github.com/mibienpanjoe/devs-tinder-API.git
+   cd devs-tinder-API
    ```
 
 2. **Set up environment variables:**
