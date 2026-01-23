@@ -1,64 +1,56 @@
-const User = require('../models/User.js')
+const User = require('../models/User')
+const UserProfile = require('../models/UserProfile')
 
-exports.getAllUsers = async(req ,res) =>{
-    try {
-        const users = await User.find()
-        res.status(200).json(users)
-
-    } catch (error) {
-        res.status(500).json({
-           error:"Could not fetch users"
-        })
+// Get current user profile
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password')
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
     }
-};
-
-// Get a single user
-
-exports.getSingleUser = async(req , res) =>{
-    try {
-        
-        const user = await User.findById(req.params.id)
-        if (!user){
-            return res.status(404).json({
-                error :"User not found"
-            })
-        }
-
-        res.status(200).json({user})
-
-    } catch (error) {
-        res.status(500).json({message :"Internal server error" , error})
-    }
+    res.json(user)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-// Update a single user 
+// Update user
+exports.updateUser = async (req, res) => {
+  const updates = Object.keys(req.body)
+  const allowedUpdates = ['name', 'email', 'profileImage']
+  const isValidOperation = updates.every(update => allowedUpdates.includes(update))
 
-exports.updateSingleUser = async(req , res) =>{
-    try {
-    const user = await User.findByIdAndUpdate(req.params.id)
+  if (!isValidOperation) {
+    return res.status(400).json({ message: 'Invalid updates' })
+  }
 
-    } catch (error) {
-        
-    }
+  try {
+    updates.forEach(update => req.user[update] = req.body[update])
+    await req.user.save()
+    res.json(req.user)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
-//Delete a single user
+// Delete user (deactivate)
+exports.deleteUser = async (req, res) => {
+  try {
+    req.user.isActive = false
+    await req.user.save()
+    res.json({ message: 'User deactivated' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
 
-exports.deleteSingleUser = async(req , res)=>{
-    try {
-        const user = await User.findByIdAndDelete(req.params.id)
-
-        if(!user) return res.status(404).json({
-            error:"User not found"
-        })
-
-        res.status(200).json({
-            message:"User deleted successfully"
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            message: "Internal server error" , error
-        })
-    }
+// Get user profile with profile data
+exports.getFullProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password')
+    const profile = await UserProfile.findOne({ user: req.user._id })
+    res.json({ user, profile })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
