@@ -113,7 +113,7 @@ All dependencies are listed in `package.json`. Key packages:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/devs-tinder.git
+   https://github.com/mibienpanjoe/devs-dating_app.git
    cd devs-tinder
    ```
 
