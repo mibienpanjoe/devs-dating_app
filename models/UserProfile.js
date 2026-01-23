@@ -19,12 +19,15 @@ const userProfileSchema = new mongoose.Schema({
 
   photos: [{ type: String }],  
 
-  location: {
-     type: String,
-     default: '' },
-  age: { 
-    type: Number,
-    min: 18 }
+   location: {
+      type: String,
+      default: '' },
+   coordinates: {
+     type: [Number], // [longitude, latitude]
+     index: '2dsphere' },
+   age: {
+     type: Number,
+     min: 18 }
     
 }, { timestamps: true });
 

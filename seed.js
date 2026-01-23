@@ -33,13 +33,13 @@ const seedData = async () => {
 
     const createdUsers = await User.insertMany(hashedUsers)
 
-    // Sample profiles
+    // Sample profiles with approximate coordinates
     const profiles = [
-      { user: createdUsers[0]._id, bio: 'Full-stack developer', skills: ['JavaScript', 'React', 'Node.js'], languages: ['English'], github: 'https://github.com/alice', location: 'New York', age: 25 },
-      { user: createdUsers[1]._id, bio: 'Backend engineer', skills: ['Python', 'Django', 'PostgreSQL'], languages: ['English', 'Spanish'], github: 'https://github.com/bob', location: 'San Francisco', age: 30 },
-      { user: createdUsers[2]._id, bio: 'Frontend specialist', skills: ['JavaScript', 'Vue.js', 'CSS'], languages: ['English'], github: 'https://github.com/charlie', location: 'Austin', age: 28 },
-      { user: createdUsers[3]._id, bio: 'Data scientist', skills: ['Python', 'Machine Learning', 'SQL'], languages: ['English', 'French'], github: 'https://github.com/diana', location: 'Seattle', age: 26 },
-      { user: createdUsers[4]._id, bio: 'DevOps engineer', skills: ['Docker', 'Kubernetes', 'AWS'], languages: ['English'], github: 'https://github.com/eve', location: 'Chicago', age: 32 }
+      { user: createdUsers[0]._id, bio: 'Full-stack developer', skills: ['JavaScript', 'React', 'Node.js'], languages: ['English'], github: 'https://github.com/alice', location: 'New York', coordinates: [-74.0060, 40.7128], age: 25 },
+      { user: createdUsers[1]._id, bio: 'Backend engineer', skills: ['Python', 'Django', 'PostgreSQL'], languages: ['English', 'Spanish'], github: 'https://github.com/bob', location: 'San Francisco', coordinates: [-122.4194, 37.7749], age: 30 },
+      { user: createdUsers[2]._id, bio: 'Frontend specialist', skills: ['JavaScript', 'Vue.js', 'CSS'], languages: ['English'], github: 'https://github.com/charlie', location: 'Austin', coordinates: [-97.7431, 30.2672], age: 28 },
+      { user: createdUsers[3]._id, bio: 'Data scientist', skills: ['Python', 'Machine Learning', 'SQL'], languages: ['English', 'French'], github: 'https://github.com/diana', location: 'Seattle', coordinates: [-122.3321, 47.6062], age: 26 },
+      { user: createdUsers[4]._id, bio: 'DevOps engineer', skills: ['Docker', 'Kubernetes', 'AWS'], languages: ['English'], github: 'https://github.com/eve', location: 'Chicago', coordinates: [-87.6298, 41.8781], age: 32 }
     ]
 
     await UserProfile.insertMany(profiles)

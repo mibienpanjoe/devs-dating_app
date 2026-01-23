@@ -1,11 +1,22 @@
 const UserProfile = require('../models/UserProfile')
+const { geocodeAddress } = require('../utils/geocode')
 
 // Create or update profile
 exports.upsertProfile = async (req, res) => {
   try {
+    const updateData = { ...req.body, user: req.user._id }
+
+    // Geocode location if provided
+    if (req.body.location && req.body.location.trim()) {
+      const coordinates = await geocodeAddress(req.body.location)
+      if (coordinates) {
+        updateData.coordinates = coordinates
+      }
+    }
+
     const profile = await UserProfile.findOneAndUpdate(
       { user: req.user._id },
-      { ...req.body, user: req.user._id },
+      updateData,
       { new: true, upsert: true }
     )
     res.json(profile)
@@ -30,9 +41,19 @@ exports.getProfile = async (req, res) => {
 // Update profile
 exports.updateProfile = async (req, res) => {
   try {
+    const updateData = req.body
+
+    // Geocode location if provided
+    if (req.body.location && req.body.location.trim()) {
+      const coordinates = await geocodeAddress(req.body.location)
+      if (coordinates) {
+        updateData.coordinates = coordinates
+      }
+    }
+
     const profile = await UserProfile.findOneAndUpdate(
       { user: req.user._id },
-      req.body,
+      updateData,
       { new: true }
     )
     if (!profile) {
