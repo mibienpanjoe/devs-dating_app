@@ -2,6 +2,7 @@ const UserProfile = require('../models/UserProfile')
 const UserPreferences = require('../models/UserPreferences')
 const { geocodeAddress } = require('../utils/geocode')
 const { calculateCompatibility } = require('../utils/matching')
+const cache = require('../utils/cache')
 
 // Create or update profile
 exports.upsertProfile = async (req, res) => {
@@ -21,6 +22,12 @@ exports.upsertProfile = async (req, res) => {
       updateData,
       { new: true, upsert: true }
     )
+
+    // Clear related caches
+    await cache.del(`potential_matches:${req.user._id}`)
+    await cache.clearPattern(`compatibility:${req.user._id}:*`)
+    await cache.clearPattern(`compatibility:*:${req.user._id}`)
+
     res.json(profile)
   } catch (error) {
     res.status(400).json({ message: error.message })
@@ -61,6 +68,12 @@ exports.updateProfile = async (req, res) => {
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' })
     }
+
+    // Clear related caches
+    await cache.del(`potential_matches:${req.user._id}`)
+    await cache.clearPattern(`compatibility:${req.user._id}:*`)
+    await cache.clearPattern(`compatibility:*:${req.user._id}`)
+
     res.json(profile)
   } catch (error) {
     res.status(400).json({ message: error.message })
@@ -81,6 +94,13 @@ exports.deleteProfile = async (req, res) => {
 exports.getCompatibility = async (req, res) => {
   try {
     const { userId } = req.params
+    const cacheKey = `compatibility:${req.user._id}:${userId}`
+
+    // Check cache
+    const cached = await cache.get(cacheKey)
+    if (cached !== null) {
+      return res.json({ compatibilityScore: cached })
+    }
 
     const [userProfile1, userProfile2, preferences1] = await Promise.all([
       UserProfile.findOne({ user: req.user._id }),
@@ -93,6 +113,9 @@ exports.getCompatibility = async (req, res) => {
     }
 
     const score = calculateCompatibility(userProfile1, userProfile2, preferences1, null)
+
+    // Cache for 1 hour
+    await cache.set(cacheKey, score, 3600)
 
     res.json({ compatibilityScore: score })
   } catch (error) {

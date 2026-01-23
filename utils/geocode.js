@@ -1,7 +1,16 @@
 const fetch = require('node-fetch')
+const cache = require('./cache')
 
 // Geocode address to coordinates using Nominatim (OpenStreetMap)
 async function geocodeAddress(address) {
+  const cacheKey = `geocode:${address.toLowerCase().trim()}`
+
+  // Check cache first
+  const cached = await cache.get(cacheKey)
+  if (cached) {
+    return cached
+  }
+
   try {
     const encodedAddress = encodeURIComponent(address)
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&limit=1`
@@ -16,7 +25,11 @@ async function geocodeAddress(address) {
 
     if (data && data.length > 0) {
       const { lon, lat } = data[0]
-      return [parseFloat(lon), parseFloat(lat)]
+      const coordinates = [parseFloat(lon), parseFloat(lat)]
+
+      // Cache for 24 hours
+      await cache.set(cacheKey, coordinates, 86400)
+      return coordinates
     } else {
       throw new Error('Address not found')
     }
