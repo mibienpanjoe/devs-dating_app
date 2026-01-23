@@ -9,10 +9,10 @@ const UserSchema = new mongoose.Schema({
         match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email']
     } , 
     password : {
-        type : String , 
-        required : [true , "Password is required"] , 
+        type : String ,
+        required : [true , "Password is required"] ,
         minLength : 6,
-        maxLemgth : 30
+        maxLength : 128  // Allow for hashed password length
     } ,
     name :{
         type:String ,
@@ -22,10 +22,11 @@ const UserSchema = new mongoose.Schema({
         trim: true 
     } , 
 
-   role : {
-    enum : ['admin' , 'user'] , 
-    default : 'user'
-   } ,
+    role : {
+     type: String,
+     enum : ['admin' , 'user'] ,
+     default : 'user'
+    } ,
 
    profileImage : {
     type : String ,
