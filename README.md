@@ -1,32 +1,37 @@
 
 # Devs Tinder Backend API
 
-A Tinder-like backend API for developers to match based on skills, programming languages, projects, and interests. Built with **Node.js**, **Express.js**, **MongoDB**, and **Socket.io** for real-time features. Features user authentication, detailed profiles, intelligent matching algorithms, geolocation filtering, real-time messaging, and more.
+A Tinder-like backend API for developers to match based on skills, programming languages, projects, and interests. Built with **Node.js**, **Express.js**, **MongoDB**, **Socket.io**, and **Redis** for real-time features and caching. Features user authentication, detailed profiles, intelligent matching algorithms, geolocation filtering with caching, real-time messaging, and performance optimization.
 
 ## Features
 
 - **User Authentication**: JWT-based signup, login, logout with password hashing.
 - **User Profiles**: Detailed developer profiles with skills, languages, bio, GitHub, photos, age, and location.
 - **Intelligent Matching**: Advanced algorithm using compatibility scores (skills, languages, age, distance).
-- **Geolocation Filtering**: Location-based matching with distance preferences.
+- **Geolocation Filtering**: Location-based matching with distance preferences and geocoding caching.
 - **Swiping System**: Like/pass swipes with automatic match creation on mutual likes.
 - **Real-Time Messaging**: Socket.io-powered live chat with typing indicators, read receipts, and online status.
 - **Image Upload**: Profile image upload with multer (local storage, extensible to cloud).
 - **Preferences Management**: Customizable matching preferences (skills, languages, age, distance).
 - **Reporting System**: User reports for moderation.
+- **Performance Caching**: Redis-powered caching for geocoding, potential matches, and compatibility scores.
 - **API Documentation**: Full Swagger/OpenAPI documentation.
 - **Seed Data**: Script to populate database with sample users and data.
+- **Containerization**: Docker support for easy development and deployment.
 
 ## Tech Stack
 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB with Mongoose ODM
+- **Cache**: Redis for performance optimization
 - **Real-Time**: Socket.io
 - **Authentication**: JWT (jsonwebtoken)
 - **Validation**: Express-validator
 - **File Upload**: Multer
+- **Geocoding**: Nominatim API with caching
 - **Security**: Helmet, CORS, bcrypt
 - **Documentation**: Swagger UI
+- **Containerization**: Docker & Docker Compose
 
 ## Project Structure
 
@@ -71,6 +76,7 @@ devs-tinder/
 │   ├── auth.js              # JWT authentication
 │   └── validation.js        # Input validation
 ├── utils/
+│   ├── cache.js             # Redis caching utilities
 │   ├── errorHandler.js      # Error handling
 │   ├── geocode.js           # Geolocation utilities
 │   └── matching.js          # Matching algorithms
@@ -86,6 +92,7 @@ All dependencies are listed in `package.json`. Key packages:
 
 * `express` - Web framework
 * `mongoose` - MongoDB ODM
+* `ioredis` - Redis client for caching
 * `bcrypt` - Password hashing
 * `jsonwebtoken` - JWT authentication
 * `socket.io` - Real-time messaging
@@ -116,7 +123,7 @@ All dependencies are listed in `package.json`. Key packages:
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/mibienpanjoe/devs-dating_app.git
-   cd devs-tinder
+   cd devs-dating_app
    ```
 
 2. **Install dependencies:**
@@ -153,7 +160,7 @@ All dependencies are listed in `package.json`. Key packages:
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/mibienpanjoe/devs-dating_app.git
-   cd devs-tinder
+   cd devs-dating_app
    ```
 
 2. **Set up environment variables:**
@@ -161,6 +168,7 @@ All dependencies are listed in `package.json`. Key packages:
    ```env
    JWT_SECRET=your_super_secret_jwt_key_here
    MONGO_URI=mongodb://mongodb:27017/devstinder
+   REDIS_URL=redis://redis:6379
    PORT=4000
    ```
 
@@ -168,6 +176,7 @@ All dependencies are listed in `package.json`. Key packages:
    ```bash
    docker-compose up --build
    ```
+   This starts the app, MongoDB, and Redis containers.
 
 4. **Seed the database (in another terminal):**
    ```bash
@@ -184,7 +193,19 @@ All dependencies are listed in `package.json`. Key packages:
 
 - `JWT_SECRET`: Secret key for JWT token signing (required)
 - `MONGO_URI`: MongoDB connection string (default: `mongodb://localhost:27017/devstinder`)
+- `REDIS_URL`: Redis connection string (default: `redis://localhost:6379`)
 - `PORT`: Server port (default: 4000)
+
+## Caching Strategy
+
+The application uses Redis for performance optimization:
+
+- **Geocoding Cache**: Address-to-coordinates mappings cached for 24 hours
+- **Potential Matches Cache**: User-specific potential matches with compatibility scores cached for 10 minutes
+- **Compatibility Scores**: Pair-wise compatibility scores cached for 1 hour
+- **Cache Invalidation**: Automatic cleanup on profile updates and swipes
+
+This significantly reduces database load and improves response times.
 
 ## API Endpoints
 
@@ -252,6 +273,8 @@ Events received:
 * Cloud image storage (AWS S3/Cloudinary)
 * User blocking system
 * Advanced analytics and reporting
+* Rate limiting for API protection
+* Multi-server Socket.io scaling with Redis adapter
 
 ## Contributing
 
