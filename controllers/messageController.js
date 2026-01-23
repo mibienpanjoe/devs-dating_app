@@ -16,7 +16,8 @@ exports.sendMessage = async (req, res) => {
     const message = new Message({
       match: matchId,
       sender: senderId,
-      content
+      content,
+      delivered: true
     })
 
     await message.save()
@@ -43,6 +44,12 @@ exports.getMessages = async (req, res) => {
     const messages = await Message.find({ match: matchId })
       .populate('sender', 'name')
       .sort({ createdAt: 1 })
+
+    // Mark messages as read if not from sender
+    await Message.updateMany(
+      { match: matchId, sender: { $ne: userId }, read: false },
+      { read: true }
+    )
 
     res.json(messages)
   } catch (error) {

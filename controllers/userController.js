@@ -54,3 +54,19 @@ exports.getFullProfile = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+// Upload profile image
+exports.uploadProfileImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' })
+    }
+
+    const imageUrl = `/uploads/${req.file.filename}`
+    await User.findByIdAndUpdate(req.user._id, { profileImage: imageUrl })
+
+    res.json({ message: 'Profile image updated', imageUrl })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
