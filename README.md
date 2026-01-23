@@ -111,9 +111,11 @@ All dependencies are listed in `package.json`. Key packages:
 
 ## Quick Start
 
+### Option 1: Local Development (without Docker)
+
 1. **Clone the repository:**
    ```bash
-   https://github.com/mibienpanjoe/devs-dating_app.git
+   git clone https://github.com/mibienpanjoe/devs-dating_app.git
    cd devs-tinder
    ```
 
@@ -146,10 +148,37 @@ All dependencies are listed in `package.json`. Key packages:
    npm run dev
    ```
 
-7. **Access the API:**
-   - Server: http://localhost:4000
-   - API Docs: http://localhost:4000/api-docs
-   - Sample login: `alice@example.com` / `password123`
+### Option 2: Docker Development (Recommended)
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/mibienpanjoe/devs-dating_app.git
+   cd devs-tinder
+   ```
+
+2. **Set up environment variables:**
+   Create a `.env` file in the root directory:
+   ```env
+   JWT_SECRET=your_super_secret_jwt_key_here
+   MONGO_URI=mongodb://mongodb:27017/devstinder
+   PORT=4000
+   ```
+
+3. **Start with Docker Compose:**
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Seed the database (in another terminal):**
+   ```bash
+   docker-compose exec app npm run seed
+   ```
+
+### Access the API (both options)
+- Server: http://localhost:4000
+- API Docs: http://localhost:4000/api-docs
+- MongoDB: localhost:27017 (Docker) or local (native)
+- Sample login: `alice@example.com` / `password123`
 
 ## Environment Variables
 
