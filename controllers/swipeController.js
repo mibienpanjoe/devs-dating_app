@@ -3,6 +3,7 @@ const Match = require('../models/Match')
 const UserProfile = require('../models/UserProfile')
 const UserPreferences = require('../models/UserPreferences')
 const { calculateDistance } = require('../utils/geocode')
+const { calculateCompatibility } = require('../utils/matching')
 
 // Swipe on a user
 exports.swipe = async (req, res) => {
@@ -89,7 +90,13 @@ exports.getPotentialMatches = async (req, res) => {
       })
     }
 
-    res.json(potentialUsers)
+    // Calculate compatibility scores and sort
+    const scoredUsers = potentialUsers.map(profile => {
+      const score = calculateCompatibility(userProfile, profile, preferences, null) // Preferences2 not needed for now
+      return { profile, score }
+    }).sort((a, b) => b.score - a.score) // Sort descending by score
+
+    res.json(scoredUsers.map(item => ({ ...item.profile.toObject(), compatibilityScore: item.score })))
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

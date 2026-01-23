@@ -33,12 +33,36 @@ router.post('/', auth, swipeController.swipe)
  * @swagger
  * /swipes/potential:
  *   get:
- *     summary: Get potential matches to swipe on
+ *     summary: Get potential matches to swipe on (sorted by compatibility score)
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of potential users
+ *         description: List of potential users with compatibility scores
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   user:
+ *                     type: object
+ *                   bio:
+ *                     type: string
+ *                   skills:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   languages:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   compatibilityScore:
+ *                     type: number
+ *                     description: Compatibility score (0-1)
  */
 router.get('/potential', auth, swipeController.getPotentialMatches)
 

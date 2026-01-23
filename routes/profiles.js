@@ -108,5 +108,32 @@ router.patch('/', auth, profileController.updateProfile)
  *         description: Profile deleted
  */
 router.delete('/', auth, profileController.deleteProfile)
+/**
+ * @swagger
+ * /profiles/compatibility/{userId}:
+ *   get:
+ *     summary: Get compatibility score with another user
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the other user
+ *     responses:
+ *       200:
+ *         description: Compatibility score
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 compatibilityScore:
+ *                   type: number
+ *                   description: Score between 0 and 1
+ */
+router.get('/compatibility/:userId', auth, profileController.getCompatibility)
 
 module.exports = router
