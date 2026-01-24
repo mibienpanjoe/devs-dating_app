@@ -203,14 +203,9 @@ All dependencies are listed in `package.json`. Key packages:
    PORT=4000
    ```
 
-4. **Start with Docker Compose:**
+3. **Start with Docker Compose:**
    ```bash
    docker-compose up --build
-   ```
-
-5. **Seed the database (in another terminal):**
-   ```bash
-   docker-compose exec app npm run seed
    ```
    This starts the app, MongoDB, and Redis containers.
 
