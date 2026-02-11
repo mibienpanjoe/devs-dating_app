@@ -15,20 +15,6 @@ A Tinder-like backend API for developers to match based on skills, programming l
 - **Preferences Management**: Customizable matching preferences (skills, languages, age, distance).
 - **Reporting System**: User reports for moderation.
 - **Performance Caching**: Redis-powered caching for geocoding, potential matches, and compatibility scores.
-- **Type Safety**: Full TypeScript implementation with compile-time type checking.
-- **API Documentation**: Full Swagger/OpenAPI documentation.
-- **Seed Data**: Script to populate database with sample users and data.
-- **Containerization**: Docker support for easy development and deployment.
-
-## TypeScript Benefits
-
-This project is fully implemented in TypeScript, providing:
-
-- **Type Safety**: Compile-time error catching prevents runtime issues
-- **Better Developer Experience**: IntelliSense, auto-completion, and refactoring support
-- **Self-Documenting Code**: Type annotations serve as inline documentation
-- **Maintainability**: Easier to scale and add new features with type contracts
-- **API Reliability**: Typed request/response interfaces ensure consistency
 
 ## Tech Stack
 
@@ -100,39 +86,7 @@ devs-tinder/
     └── auth.test.ts         # Auth tests (TypeScript)
 ```
 
-## Dependencies
-
-All dependencies are listed in `package.json`. Key packages:
-
-**Production:**
-
-* `express` - Web framework
-* `mongoose` - MongoDB ODM
-* `ioredis` - Redis client for caching
-* `bcrypt` - Password hashing
-* `jsonwebtoken` - JWT authentication
-* `socket.io` - Real-time messaging
-* `multer` - File uploads
-* `node-fetch` - HTTP requests for geocoding
-* `swagger-ui-express`, `swagger-jsdoc` - API documentation
-* `cors`, `helmet`, `morgan` - Security and logging
-
-**Development:**
-
-* `nodemon` - Auto-restart server
-* `express-validator` - Input validation
-
 ## Scripts
-
-```json
-{
-  "build": "tsc",
-  "start": "node dist/index.js",
-  "dev": "nodemon --exec ts-node index.ts",
-  "seed": "ts-node seed.ts",
-  "clean": "rm -rf dist"
-}
-```
 
 - `npm run build` - Compile TypeScript to JavaScript
 - `npm run dev` - Run development server with hot reloading
@@ -306,17 +260,6 @@ Events received:
 - `newMessage`: New message in match
 - `typing`: Typing status update
 - `messageRead`: Message read confirmation
-
-## Future Enhancements
-
-* Push notifications (FCM for mobile alerts)
-* Profile verification (email/photo verification)
-* Admin dashboard (user management, analytics)
-* Cloud image storage (AWS S3/Cloudinary)
-* User blocking system
-* Advanced analytics and reporting
-* Rate limiting for API protection
-* Multi-server Socket.io scaling with Redis adapter
 
 ## Contributing
 
